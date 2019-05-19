@@ -1,4 +1,10 @@
 #
+# Added for this project
+#
+
+dist/
+
+#
 # https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore
 #
 

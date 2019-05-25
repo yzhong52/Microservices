@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: auth-service
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: auth-service
+subsets:
+- addresses:
+  - ip: 10.0.2.2
+  ports:
+  - port: 8080

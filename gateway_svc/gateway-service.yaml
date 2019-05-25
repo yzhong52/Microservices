@@ -7,7 +7,6 @@ spec:
   selector:
     app: gateway-app
   ports:
-  - name: gateway-service
-    protocol: TCP
+  - protocol: TCP
     port: 80
     targetPort: 8080

@@ -20,6 +20,10 @@ It has two endpoints `api/v1/hey` and `/api/v1/book/:id`.
 `/api/v1/book/:id` will first authenticate the request by sending a request to **auth-svc**.
 If it is authenticated, it will then make a request to **books-svc** asking for details for the book given id.
 
+# Scala 
+
+<https://github.com/finagle/finch>
+
 ## Running Services
 
 We are using `books_svc` as an example here. But the principle is the same for `auth_svc` and `gateway_svc`.

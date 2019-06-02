@@ -1,33 +1,38 @@
 package com.example.books
 
+import java.time.LocalDate
+
 import cats.effect.IO
-import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
+import io.circe.generic.auto._
 import io.finch._
 import io.finch.catsEffect._
 import io.finch.circe._
-import io.circe.generic.auto._
 
 object Main extends App {
+  val basePath = "api" :: "v1"
 
-  case class Message(hello: String)
+  case class Book(
+    bookId: Int,
+    title: String,
+    author: String,
+    publishedDate: LocalDate
+  )
 
-  def healthcheck: Endpoint[IO, String] = get(pathEmpty) {
-    Ok("OK")
-  }
-
-  def helloWorld: Endpoint[IO, Message] = get("hello") {
-    Ok(Message("World"))
-  }
-
-  def hello: Endpoint[IO, Message] = get("hello" :: path[String]) { s: String =>
-    Ok(Message(s))
+  def getBooks: Endpoint[IO, Book] = get(basePath :: "book" :: path[Int]) { bookId: Int =>
+    val book = Book(
+      bookId = bookId,
+      title = "An Absolutely Remarkable Thing",
+      author = "Hank Green",
+      publishedDate = LocalDate.parse("2018-12-25"),
+    )
+    Ok(book)
   }
 
   def service: Service[Request, Response] = Bootstrap
-    .serve[Text.Plain](healthcheck)
-    .serve[Application.Json](helloWorld :+: hello)
+    .serve[Application.Json](getBooks)
     .toService
 
   Await.ready(Http.server.serve(":8081", service))

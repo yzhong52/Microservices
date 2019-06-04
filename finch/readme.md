@@ -6,5 +6,4 @@ To build the image.
 
 ```
 sbt docker:publishLocal
-
 ```

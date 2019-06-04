@@ -1,4 +1,4 @@
-package com.example.gateway_svc
+package com.example.gateway
 
 import io.finch._
 import org.scalatest.FunSuite

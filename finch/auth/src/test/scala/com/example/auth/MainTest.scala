@@ -1,6 +1,6 @@
-package com.example.auth_svc
+package com.example.auth
 
-import com.example.auth_svc.Main.AuthResponse
+import com.example.auth.Main.AuthResponse
 import io.finch._
 import org.scalatest.FunSuite
 

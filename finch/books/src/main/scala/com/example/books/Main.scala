@@ -3,6 +3,7 @@ package com.example.books
 import java.time.LocalDate
 
 import cats.effect.IO
+import com.example.core.API.Book
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
@@ -13,13 +14,6 @@ import io.finch.circe._
 
 object Main extends App {
   val basePath = "api" :: "v1"
-
-  case class Book(
-    bookId: Int,
-    title: String,
-    author: String,
-    publishedDate: LocalDate
-  )
 
   def getBooks: Endpoint[IO, Book] = get(basePath :: "book" :: path[Int]) { bookId: Int =>
     val book = Book(
@@ -35,5 +29,5 @@ object Main extends App {
     .serve[Application.Json](getBooks)
     .toService
 
-  Await.ready(Http.server.serve(":8080", service))
+  Await.ready(Http.server.serve(":8082", service))
 }

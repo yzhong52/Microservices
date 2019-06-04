@@ -1,4 +1,4 @@
-package com.example.auth_svc
+package com.example.auth
 
 import cats.effect.IO
 import com.twitter.finagle.http.{Request, Response}
@@ -29,5 +29,5 @@ object Main extends App {
     .serve[Application.Json](authenticate)
     .toService
 
-  Await.ready(Http.server.serve(":8080", service))
+  Await.ready(Http.server.serve(":8081", service))
 }

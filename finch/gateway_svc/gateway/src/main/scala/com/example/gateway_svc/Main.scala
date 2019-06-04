@@ -3,7 +3,7 @@ package com.example.gateway_svc
 import cats.effect.IO
 import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.util.Await
+import com.twitter.util.{Await, Future}
 import io.finch._
 import io.finch.catsEffect._
 import io.finch.circe._
@@ -12,6 +12,9 @@ import io.circe.generic.auto._
 object Main extends App {
 
   case class Message(hello: String)
+
+  def fetchUserForToken(token: String): Future[Option[Message]] = ???
+
 
   def healthcheck: Endpoint[IO, String] = get(pathEmpty) {
     Ok("OK")
@@ -30,5 +33,5 @@ object Main extends App {
     .serve[Application.Json](helloWorld :+: hello)
     .toService
 
-  Await.ready(Http.server.serve(":8081", service))
+  Await.ready(Http.server.serve(":8080", service))
 }

@@ -2,6 +2,9 @@ val finchVersion = "0.26.0"
 val circeVersion = "0.10.1"
 val scalatestVersion = "3.0.5"
 
+enablePlugins(JavaAppPackaging)
+enablePlugins(DockerPlugin)
+
 lazy val root = (project in file("."))
   .settings(
     organization := "com.example",
@@ -12,6 +15,7 @@ lazy val root = (project in file("."))
       "com.github.finagle" %% "finchx-core"  % finchVersion,
       "com.github.finagle" %% "finchx-circe"  % finchVersion,
       "io.circe" %% "circe-generic" % circeVersion,
-      "org.scalatest"      %% "scalatest"    % scalatestVersion % "test"
+      "joda-time" % "joda-time" % "2.10.2",
+      "com.spotify" % "docker-client" % "8.9.0",
     )
   )

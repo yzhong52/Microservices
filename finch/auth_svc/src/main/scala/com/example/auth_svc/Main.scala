@@ -1,34 +1,33 @@
 package com.example.auth_svc
 
 import cats.effect.IO
-import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
+import io.circe.generic.auto._
 import io.finch._
 import io.finch.catsEffect._
 import io.finch.circe._
-import io.circe.generic.auto._
 
 object Main extends App {
+  def secretAuthToken = "SUPERSECUREAUTTHTOKEN"
 
-  case class Message(hello: String)
+  def authHeader = "Authorization"
 
-  def healthcheck: Endpoint[IO, String] = get(pathEmpty) {
-    Ok("OK")
-  }
+  case class AuthResponse(ok: Boolean)
 
-  def helloWorld: Endpoint[IO, Message] = get("hello") {
-    Ok(Message("World"))
-  }
-
-  def hello: Endpoint[IO, Message] = get("hello" :: path[String]) { s: String =>
-    Ok(Message(s))
+  def authenticate: Endpoint[IO, AuthResponse] = get(header(authHeader)) { token: String =>
+    if (token == secretAuthToken) Ok(AuthResponse(true))
+    else Ok(AuthResponse(false))
+  }.handle {
+    case e: Error.NotPresent =>
+      Console.err.print(s"Missing header $authHeader $e")
+      Ok(AuthResponse(false))
   }
 
   def service: Service[Request, Response] = Bootstrap
-    .serve[Text.Plain](healthcheck)
-    .serve[Application.Json](helloWorld :+: hello)
+    .serve[Application.Json](authenticate)
     .toService
 
-  Await.ready(Http.server.serve(":8081", service))
+  Await.ready(Http.server.serve(":8080", service))
 }

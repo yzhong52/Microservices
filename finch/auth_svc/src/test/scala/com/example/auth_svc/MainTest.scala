@@ -1,18 +1,24 @@
 package com.example.auth_svc
 
+import com.example.auth_svc.Main.AuthResponse
 import io.finch._
 import org.scalatest.FunSuite
 
 class MainTest extends FunSuite {
-  test("healthcheck") {
-    assert(Main.healthcheck(Input.get("/")).awaitValueUnsafe() == Some("OK"))
+  private val path = "/"
+
+  test("Authenticate success") {
+    val input = Input.get(path).withHeaders((Main.authHeader, Main.secretAuthToken))
+    assert(Main.authenticate(input).awaitValueUnsafe().get == AuthResponse(true))
   }
 
-  test("helloWorld") {
-    assert(Main.helloWorld(Input.get("/hello")).awaitValueUnsafe() == Some(Main.Message("World")))
+  test("Authenticate false") {
+    val input = Input.get(path).withHeaders((Main.authHeader, "Fake Token"))
+    assert(Main.authenticate(input).awaitValueUnsafe().get == AuthResponse(false))
   }
 
-  test("hello") {
-    assert(Main.hello(Input.get("/hello/foo")).awaitValueUnsafe() == Some(Main.Message("foo")))
+  test("Missing Authenticate header") {
+    val input = Input.get(path)
+    assert(Main.authenticate(input).awaitValueUnsafe().get == AuthResponse(false))
   }
 }

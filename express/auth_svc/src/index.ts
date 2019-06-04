@@ -4,7 +4,7 @@ const app = express();
 const port = 8080;
 
 app.use((req, res) => {
-  if (req.get('authorization') === 'ASUPERSECUREAUTTHTOKEN') {
+  if (req.get('Authorization') === 'ASUPERSECUREAUTTHTOKEN') {
     res.json({
       ok: true
     })

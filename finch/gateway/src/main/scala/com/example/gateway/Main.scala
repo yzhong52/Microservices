@@ -1,44 +1,43 @@
 package com.example.gateway
 
-import java.nio.charset.StandardCharsets
-
 import cats.effect.IO
-import com.example.core.API.Book
-import com.twitter.finagle.Http.Client
-import com.twitter.finagle.{Http, Service, http}
-import com.twitter.finagle.http.{Request, Response}
+import com.example.core.API.{AuthResponse, AuthHeader, Book}
+import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finagle.{Http, Service}
 import com.twitter.io.Buf
-import com.twitter.util.{Await, Future, Return}
-import io.circe.Decoder.Result
+import com.twitter.util.{Await, Future}
+import io.circe._
+import io.circe.generic.auto._
 import io.finch._
 import io.finch.catsEffect._
 import io.finch.circe._
-import io.circe.generic.auto._
-import io.circe._
-import io.circe.generic.auto._
-import io.circe.parser._
-import io.circe.syntax._
-import io.circe._
-import io.circe.generic.auto._
-import io.circe.parser._
-import io.circe.syntax._
-import io.circe.syntax._
-import io.circe.parser.decode
-import io.circe._
-import io.circe.generic.semiauto._
 
 
 object Main extends App {
 
   case class Message(hello: String)
 
-  // TODO: Yuchen - configure the dns name here
+  // TODO: Yuchen - configure the port here
   def authClient: Service[Request, Response] = Http.client.newService("auth.local.zone:8081")
 
-  val request = http.Request(http.Method.Get, "/")
-  request.host = "www.scala-lang.org"
+  def authRequest(authToken: String): Request = {
+    val request = Request("").method(Method.Get)
+    request.headerMap.add(AuthHeader, "SUPERSECUREAUTTHTOKEN")
+    request
+  }
 
-  // TODO: Yuchen - configure the dns name here
+  def checkAuth(authToken: String): Future[AuthResponse] = authClient(authRequest(authToken)).map { response =>
+    val str = new String(Buf.ByteArray.Owned.extract(response.content), "UTF-8")
+    parser.decode[AuthResponse](str) match {
+      case Left(failure) =>
+        sys.error(s"Invalid JSON :( $failure $str ${Buf.ByteArray.Owned.extract(response.content)}")
+      case Right(book) =>
+        println(book)
+        book
+    }
+  }
+
+  // TODO: Yuchen - configure the port here
   def booksClient: Service[Request, Response] = Http.client.newService("book.local.zone:8082")
 
   def fetchBook(bookId: Int): Future[Book] = booksClient(Request(s"/api/v1/book/$bookId")).map { repsponse =>
@@ -47,7 +46,6 @@ object Main extends App {
       case Left(failure) =>
         sys.error(s"Invalid JSON :( $failure")
       case Right(book) =>
-        println(book)
         book
     }
   }
@@ -59,6 +57,10 @@ object Main extends App {
   def helloWorld: Endpoint[IO, Message] = get("hello") {
     val book = Await.result(fetchBook(1))
     Console.err.println(book)
+
+    val authResponse = Await.result(checkAuth("SUPERSECUREAUTTHTOKEN"))
+    Console.err.println(authResponse)
+
     Ok(Message("World"))
   }
 

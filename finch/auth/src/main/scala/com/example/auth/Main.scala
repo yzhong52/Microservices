@@ -1,6 +1,8 @@
 package com.example.auth
 
 import cats.effect.IO
+import com.example.core.API.AuthResponse
+import com.example.core.API.AuthHeader
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
@@ -12,16 +14,12 @@ import io.finch.circe._
 object Main extends App {
   def secretAuthToken = "SUPERSECUREAUTTHTOKEN"
 
-  def authHeader = "Authorization"
-
-  case class AuthResponse(ok: Boolean)
-
-  def authenticate: Endpoint[IO, AuthResponse] = get(header(authHeader)) { token: String =>
+  def authenticate: Endpoint[IO, AuthResponse] = get(header(AuthHeader)) { token: String =>
     if (token == secretAuthToken) Ok(AuthResponse(true))
     else Ok(AuthResponse(false))
   }.handle {
     case e: Error.NotPresent =>
-      Console.err.print(s"Missing header $authHeader $e")
+      Console.err.print(s"Missing header $AuthHeader $e")
       Ok(AuthResponse(false))
   }
 

@@ -3,7 +3,7 @@ package com.example.auth
 import cats.effect.IO
 import com.example.core.API.AuthResponse
 import com.example.core.API.AuthHeader
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
 import io.circe.generic.auto._
@@ -16,11 +16,11 @@ object Main extends App {
 
   def authenticate: Endpoint[IO, AuthResponse] = get(header(AuthHeader)) { token: String =>
     if (token == secretAuthToken) Ok(AuthResponse(true))
-    else Ok(AuthResponse(false))
+    else Output.payload(AuthResponse(false), Status.Forbidden)
   }.handle {
     case e: Error.NotPresent =>
       Console.err.print(s"Missing header $AuthHeader $e")
-      Ok(AuthResponse(false))
+      Output.payload(AuthResponse(false), Status.Forbidden)
   }
 
   def service: Service[Request, Response] = Bootstrap

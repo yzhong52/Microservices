@@ -24,7 +24,7 @@ lazy val helpers = (project in file("helpers"))
     commonSettings
   )
 
-lazy val gateway = (project in file("gateway"))
+lazy val gateway = (project in file("gateway_svc"))
   .settings(
     name := "gateway",
     libraryDependencies += "io.circe" %% "circe-parser" % circeVersion,
@@ -33,7 +33,7 @@ lazy val gateway = (project in file("gateway"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
 
 
-lazy val books = (project in file("books"))
+lazy val books = (project in file("books_svc"))
   .settings(
     name := "books",
     commonSettings
@@ -41,7 +41,7 @@ lazy val books = (project in file("books"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
 
 
-lazy val auth = (project in file("auth"))
+lazy val auth = (project in file("auth_svc"))
   .settings(
     name := "auth",
     commonSettings

@@ -27,5 +27,5 @@ object Main extends App {
     .serve[Application.Json](authenticate)
     .toService
 
-  Await.ready(Http.server.serve(":8081", service))
+  Await.ready(Http.server.serve(":8080", service))
 }

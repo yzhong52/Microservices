@@ -65,5 +65,5 @@ object Main extends App {
     .serve[Application.Json](getBooks)
     .toService
 
-  Await.ready(Http.server.serve(":8083", service))
+  Await.ready(Http.server.serve(":8080", service))
 }

@@ -2,27 +2,33 @@
 
 Three simple services:
 
-**books_svc**
+**books**
 
 To keep things simple, we don't really have a database of books.
 For whatever request that is made to the `/api/v1/book/:id` endpoint, we always return a same book.
 
-**auth_svc**
+**auth**
 
 It will check the authorization token.
 If it matches `SUPERSECUREAUTTHTOKEN`, then returns `{ok: true}`;
 otherwise, return `{ok: false}`.
 
-**gateway_svc**
+**gateway**
 
-It has two endpoints `api/v1/hey` and `/api/v1/book/:id`.
-`api/v1/hey` will simply response "Hello World".
-`/api/v1/book/:id` will first authenticate the request by sending a request to **auth-svc**.
-If it is authenticated, it will then make a request to **books-svc** asking for details for the book given id.
+`/api/v1/book/:bookId` will first authenticate the request by sending a request to **auth**.
+If it is authenticated, it will then make a request to **books** asking for details for the book given id.
+
+# Implementations
+
+* scala + finch
+* typescript + express
+ 
 
 ## Running Services
 
-We are using `books_svc` as an example here. But the principle is the same for `auth_svc` and `gateway_svc`.
+We are using **books** (typescript) as an example here.
+But the principle is the same for **auth** and **gateway**.
+And it should be similar with the scala implementation.
 
 ### Running service locally
 

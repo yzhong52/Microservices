@@ -7,7 +7,7 @@ const port = 8080;
 app.get('/api/v1/hey', (req, res) => res.send('Hello World!'));
 
 app.get("/api/v1/book/:id", async (req, res) => {
-  const headers = { headers: { authorization: req.get('authorization') } }
+  const headers = { headers: { Authorization: req.get('Authorization') } }
   request.get('http://auth-service.default.svc.cluster.local', headers)
     .then((data) => {
       request.get(`http://books-service.default.svc.cluster.local/api/v1/book/${req.params.id}`)

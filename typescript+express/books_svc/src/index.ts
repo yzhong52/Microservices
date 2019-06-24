@@ -8,7 +8,7 @@ app.get('/api/v1/book/:id', (req, res) => {
 		"book_id": req.params.id,
 		"title": "An Absolutely Remarkable Thing",
 		"author": "Hank Green",
-		"published_date": "September 25th, 2018"
+		"published_date": "2018-12-25"
 	})
 });
 

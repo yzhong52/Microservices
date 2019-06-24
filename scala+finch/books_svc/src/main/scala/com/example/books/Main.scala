@@ -15,12 +15,12 @@ import io.finch.circe._
 object Main extends App {
   val basePath = "api" :: "v1"
 
-  def getBooks: Endpoint[IO, Book] = get(basePath :: "book" :: path[Int]) { bookId: Int =>
+  def getBooks: Endpoint[IO, Book] = get(basePath :: "book" :: path[String]) { bookId: String =>
     val book = Book(
-      bookId = bookId,
+      book_id = bookId,
       title = "An Absolutely Remarkable Thing",
       author = "Hank Green",
-      publishedDate = LocalDate.parse("2018-12-25"),
+      published_date = LocalDate.parse("2018-12-25"),
     )
     Ok(book)
   }

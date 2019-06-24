@@ -8,10 +8,9 @@ object API {
   case class AuthResponse(ok: Boolean)
 
   case class Book(
-    bookId: Int,
+    book_id: String,
     title: String,
     author: String,
-    publishedDate: LocalDate
+    published_date: LocalDate
   )
-
 }

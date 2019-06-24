@@ -9,7 +9,7 @@ def book(book_id):
         "book_id": book_id,
         "title": "An Absolutely Remarkable Thing",
         "author": "Hank Green",
-        "published_date": "September 25th, 2018"
+        "published_date": "2018-12-25"
     })
 
 

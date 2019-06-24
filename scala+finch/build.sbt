@@ -12,9 +12,9 @@ lazy val commonSettings = Seq(
     "com.github.finagle" %% "finchx-circe" % finchVersion,
     "io.circe" %% "circe-generic" % circeVersion,
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
+    "io.circe" %% "circe-parser" % circeVersion % "test",
   ),
 )
-
 
 lazy val root = (project in file("."))
   .aggregate(gateway, books, auth)

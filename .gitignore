@@ -3,6 +3,8 @@
 #
 
 dist/
+.idea
+__pycache__/
 
 #
 # https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore
@@ -92,3 +94,4 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+

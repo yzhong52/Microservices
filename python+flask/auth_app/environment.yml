@@ -1,0 +1,7 @@
+name: microservices
+channels:
+- defaults
+dependencies:
+- python=3.7
+- flask
+- gunicorn

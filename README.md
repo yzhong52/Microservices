@@ -1,6 +1,6 @@
 # Kubernetes Microservices Demo
 
-Three simple services:
+Three simple apps in this repo:
 
 **books**
 
@@ -10,25 +10,26 @@ For whatever request that is made to the `/api/v1/book/:id` endpoint, we always 
 **auth**
 
 It will check the authorization token.
-If it matches `SUPERSECUREAUTTHTOKEN`, then returns `{ok: true}`;
-otherwise, return `{ok: false}`.
+If it matches `SUPERSECUREAUTTHTOKEN`, then it returns `{ok: true}`;
+otherwise, it returns `{ok: false}`.
 
 **gateway**
 
-`/api/v1/book/:bookId` will first authenticate the request by sending a request to **auth**.
-If it is authenticated, it will then make a request to **books** asking for details for the book given id.
+`/api/v1/book/:bookId` validates the authentication the request by forwarding a request to **auth**.
+If it is authenticated, it will then make a request to **books** asking for details for the book given the `bookId `.
 
 # Implementations
 
 * scala + finch
 * typescript + express
+* python + flask
  
 
 ## Running Services
 
 We are using **books** (typescript) as an example here.
 But the principle is the same for **auth** and **gateway**.
-And it should be similar with the scala implementation.
+And it should be similar with the scala and python implementation.
 
 ### Running service locally
 
@@ -54,8 +55,8 @@ curl http://localhost:8080/api/v1/book/1
 
 ### Running service inside minikube cluster
 
-Build docker image (for the docker daemon inside minikube). 
-Create kubenete deployment and service.
+Build docker images for the docker daemon inside minikube.
+And then create kubenete deployment and service.
 
 ```
 eval $(minikube docker-env)

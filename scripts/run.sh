@@ -1,13 +1,13 @@
 set -e
 
-# # Start minikube cluster
-# minikube start
+# Start minikube cluster
+minikube start
 
-# # Check nodes
-# kubectl get nodes
+# Check nodes
+kubectl get nodes
 
-# # Use the docker deamon with minikube
-# eval $(minikube docker-env)
+# Use the docker deamon with minikube
+eval $(minikube docker-env)
 
 deploy_all() {
     cd ../ops
@@ -47,7 +47,7 @@ function compare() {
 
 for build_images in ${build_images_scripts[@]}
 do
-    echo "\nBuilding iamge vith ${build_images}.sh...\n"
+    echo "\nBuilding iamge vith '${build_images}.sh'...\n"
     sleep 5
 
     sh ${build_images}.sh
@@ -57,7 +57,7 @@ do
 
     deploy_all
 
-    echo "\nWaiting for services to start...\n"
+    echo "\nWaiting 20s for services to start...\n"
     sleep 20
 
     curl $(minikube service books-service --url)/api/v1/book/1 \
@@ -80,4 +80,4 @@ do
     compare output/auth_fail.json spec/auth_fail.json
 done
 
-
+minikube delete

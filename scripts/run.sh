@@ -32,19 +32,6 @@ build_images_scripts=(
 
 mkdir -p output
 
-function compare() {
-    file1=$1
-    file2=$2
-    difference=(diff file1 file2)
-    
-    if [ -n "$difference" ]; then
-      echo "File '$file1' and '$file2' are identical."
-    else
-      echo $difference
-      exit 1
-    fi
-}
-
 for build_images in ${build_images_scripts[@]}
 do
     echo "\nBuilding iamge vith '${build_images}.sh'...\n"
@@ -61,23 +48,24 @@ do
     sleep 20
 
     curl $(minikube service books-service --url)/api/v1/book/1 \
-        | jq '.' > output/books.json
-    compare output/books.json spec/books.json
-
-    curl $(minikube service gateway-service --url)/api/v1/book/1 \
-        -H "authorization: SUPERSECUREAUTTHTOKEN" \
-        | jq '.' > output/gateway.json
-    compare output/gateway.json spec/gateway.json
+        | jq -S '.' > output/books.json
+    sh compare_file.sh output/books.json spec/books.json
 
     curl $(minikube service auth-service --url) \
         -H "authorization: SUPERSECUREAUTTHTOKEN" \
-        | jq '.' > output/auth_success.json
-    compare output/auth_success.json spec/auth_success.json
+        | jq -S '.' > output/auth_success.json
+    sh compare_file.sh output/auth_success.json spec/auth_success.json
 
     curl $(minikube service auth-service --url) \
         -H "authorization: NOTAVALIDTOKEN" \
-        | jq '.' > output/auth_fail.json
-    compare output/auth_fail.json spec/auth_fail.json
+        | jq -S '.' > output/auth_fail.json
+    sh compare_file.sh output/auth_fail.json spec/auth_fail.json
+
+    curl $(minikube service gateway-service --url)/api/v1/book/1 \
+        -H "Authorization: SUPERSECUREAUTTHTOKEN" \
+        | jq -S '.' > output/gateway.json
+    sh compare_file.sh output/gateway.json spec/gateway.json
+
 done
 
-minikube delete
+echo "Please run 'minikube delete' when done."

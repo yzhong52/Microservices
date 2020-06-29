@@ -12,7 +12,7 @@ def gateway(book_id):
     token = request.headers['Authorization']
     auth = requests.get(auth_url, headers={'Authorization': token})
     if auth.ok:
-        book_response = requests.get(f"${books_url}/api/v1/book/${book_id}")
+        book_response = requests.get(f"{books_url}/api/v1/book/{book_id}")
         return book_response.content, book_response.status_code, book_response.headers.items()
     else:
         return Response('Access denied', 401)

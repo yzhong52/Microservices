@@ -1,7 +1,7 @@
 cd ../python+flask
 
-docker build ./gateway_svc -t gateway
-docker build ./auth_svc -t auth
-docker build ./books_svc -t books
+docker build ./gateway_app -t gateway
+docker build ./auth_app -t auth
+docker build ./books_app -t books
 
 cd -

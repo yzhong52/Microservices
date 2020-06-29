@@ -24,10 +24,10 @@ deploy_all() {
 
 cd ../scripts
 
- # "build_scala_finch"
 build_images_scripts=(
     "build_typescript_express"
     "build_python_flask"
+    "build_scala_finch"
 )
 
 mkdir -p output
@@ -47,7 +47,7 @@ function compare() {
 
 for build_images in ${build_images_scripts[@]}
 do
-    echo "Building iamge vith ${build_images}.sh..."
+    echo "\nBuilding iamge vith ${build_images}.sh...\n"
     sleep 5
 
     sh ${build_images}.sh
@@ -57,8 +57,8 @@ do
 
     deploy_all
 
-    echo "Waiting for services to start..."
-    sleep 10
+    echo "\nWaiting for services to start...\n"
+    sleep 20
 
     curl $(minikube service books-service --url)/api/v1/book/1 \
         | jq '.' > output/books.json

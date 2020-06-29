@@ -1,10 +1,10 @@
-val finchVersion = "0.26.0"
-val circeVersion = "0.10.1"
-val scalatestVersion = "3.0.5"
+val finchVersion = "0.32.0"
+val circeVersion = "0.12.3"
+val scalatestVersion = "3.2.0"
 
 ThisBuild / organization := "com.example"
 ThisBuild / version := "latest"
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.13.2"
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
